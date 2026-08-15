@@ -1,0 +1,37 @@
+name: Incremental feature
+description: Start a new Spec Kit feature (specify → plan → tasks → implement)
+title: "[Feature] "
+labels: ["speckit", "incremental"]
+body:
+  - type: textarea
+    id: why
+    attributes:
+      label: Why
+      description: Problem and user outcome (no tech stack)
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What (FRs)
+      description: Numbered functional requirements
+      placeholder: |
+        FR-1: ...
+        FR-2: ...
+    validations:
+      required: true
+  - type: textarea
+    id: out
+    attributes:
+      label: Out of scope
+    validations:
+      required: false
+  - type: checkboxes
+    id: process
+    attributes:
+      label: Spec Kit process
+      options:
+        - label: Will run /speckit.specify then plan/tasks before implement
+          required: true
+        - label: Will honor .specify/memory/constitution.md (JUnit, SAST, HITL, Java-only)
+          required: true

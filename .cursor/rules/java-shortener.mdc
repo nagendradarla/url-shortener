@@ -1,0 +1,14 @@
+---
+description: Java conventions for the URL shortener
+globs: src/**/*.java
+alwaysApply: false
+---
+
+# Java shortener
+
+- Package: `com.example.shortener`.
+- Zero runtime dependencies. JDK `HttpServer` only for HTTP.
+- Short codes: `SecureRandom` + `Base62Codec`. Never `java.util.Random`.
+- `UrlValidator` allow-lists `http`/`https` and requires a host.
+- `shorten` is idempotent per long URL. `resolve` returns `Optional` and never throws on unknown/blank/null codes.
+- Keep SAST rules in `SastScanner` aligned with constitution II.

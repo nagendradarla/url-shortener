@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "command": ".cursor/hooks/session-start.sh"
+      }
+    ],
+    "stop": [
+      {
+        "command": ".cursor/hooks/quality-gates.sh",
+        "loop_limit": 5,
+        "timeout": 180
+      }
+    ]
+  }
+}

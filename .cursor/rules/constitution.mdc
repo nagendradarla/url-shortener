@@ -1,0 +1,17 @@
+---
+description: Enforce the URL shortener constitution on every agent turn
+alwaysApply: true
+---
+
+# Constitution (always on)
+
+Read `.specify/memory/constitution.md` before proposing code.
+
+Non-negotiable:
+- Java 21 only. Do not add Python (or other) app, test, or SAST tooling.
+- JUnit 5 for every public service behavior: happy path, edge, and failure.
+- Run `mvn test` and `mvn -q exec:java -Dexec.mainClass=com.example.shortener.sast.SastScanner`.
+- HIGH/CRITICAL SAST findings block HITL.
+- Max 5 autonomous implement → test → scan → fix iterations, then stop.
+- Never merge. Produce `hitl/HITL_GATE.md` and wait for a human (GitHub PR review).
+- Map every change to a task ID in `specs/001-url-shortener/tasks.md` (or the active feature's tasks.md) and every test to an FR in spec.md.
