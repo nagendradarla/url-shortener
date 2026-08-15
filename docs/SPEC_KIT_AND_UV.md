@@ -1,6 +1,6 @@
 # Spec Kit + uv — initial and incremental setup
 
-`uv` is **only** for the Spec Kit CLI (`specify-cli`). The URL shortener itself is Maven/Java 21. Do not use uv to run, test, or scan the service.
+`uv` is **only** for the Spec Kit CLI (`specify-cli`). The URL shortener itself is Maven/Java 17. Do not use uv to run, test, or scan the service.
 
 Official docs: [Spec Kit Quick Start](https://github.github.io/spec-kit/quickstart.html) · [Installation](https://github.github.io/spec-kit/installation.html)
 
@@ -9,8 +9,8 @@ Official docs: [Spec Kit Quick Start](https://github.github.io/spec-kit/quicksta
 - Python 3.11+ (needed by `specify-cli`, not by the app)
 - [uv](https://docs.astral.sh/uv/)
 - Git
-- JDK 21+ and Maven 3.9+
-- Cursor (this repo is wired for `--ai cursor-agent`)
+- JDK 17+ and Maven 3.9+
+- Cursor (this repo is wired for `--integration cursor-agent`)
 - GitHub CLI (`gh`) for issues/PRs
 
 ## 1. Install uv and Specify
@@ -28,13 +28,15 @@ uv tool install specify-cli
 specify version
 ```
 
+
+
 ## 2. Initial development (this repo already has artifacts)
 
 This repository already contains constitution, spec, plan, tasks, Java code, and Cursor skills. After cloning:
 
 ```bash
 cd url-shortener
-specify init --here --ai cursor-agent --script sh --ignore-agent-tools --force
+specify init --here --integration cursor-agent --script sh --ignore-agent-tools --force
 ```
 
 `--force` merges Spec Kit templates into the existing tree. Prefer committing first so you can diff the merge.
@@ -43,7 +45,7 @@ If you were starting from an empty directory instead:
 
 ```bash
 uv tool install specify-cli
-specify init url-shortener --ai cursor-agent --script sh
+specify init url-shortener --integration cursor-agent --script sh
 cd url-shortener
 ```
 
@@ -52,7 +54,7 @@ Then in Cursor, run in order (full path):
 1. `/speckit.constitution` — already filled; only amend on purpose
 2. `/speckit.specify` — already `specs/001-url-shortener/spec.md`
 3. `/speckit.clarify` — optional
-4. `/speckit.plan` — already present (Java 21)
+4. `/speckit.plan` — already present (Java 17)
 5. `/speckit.checklist` — optional (after official `specify init`)
 6. `/speckit.tasks` — already T1–T10
 7. `/speckit.analyze` — consistency check
@@ -75,7 +77,7 @@ Then:
 
 ```text
 /speckit.clarify
-/speckit.plan Keep Java 21, in-memory ConcurrentHashMap, JUnit 5, existing SAST rules.
+/speckit.plan Keep Java 17, in-memory ConcurrentHashMap, JUnit 5, existing SAST rules.
 /speckit.tasks
 /speckit.analyze
 /speckit.taskstoissues    # optional, needs: gh auth login
@@ -108,9 +110,12 @@ Then:
 
 ## 5. What uv is not used for
 
-| Tool | Purpose |
-|------|---------|
+
+| Tool             | Purpose                                             |
+| ---------------- | --------------------------------------------------- |
 | uv + specify-cli | Spec Kit commands, templates, Cursor skills refresh |
-| Maven | compile, JUnit, exec server, exec SAST |
-| GitHub Actions | same Maven gates on every PR |
-| Cursor hooks | local agentic loop after the agent stops |
+| Maven            | compile, JUnit, exec server, exec SAST              |
+| GitHub Actions   | same Maven gates on every PR                        |
+| Cursor hooks     | local agentic loop after the agent stops            |
+
+

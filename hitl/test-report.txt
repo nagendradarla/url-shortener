@@ -1,6 +1,6 @@
-Tests run: 20, Failures: 0, Errors: 0, Skipped: 0
-- UrlShortenerServerTest: 3
-- UrlShortenerServiceTest: 9
+Tests run: 29, Failures: 0, Errors: 0, Skipped: 0
+- UrlShortenerServerTest: 5
+- UrlShortenerServiceTest: 16
 - Base62CodecTest: 3
 - UrlValidatorTest: 3
 - SastScannerTest: 2

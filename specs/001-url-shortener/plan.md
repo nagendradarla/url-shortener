@@ -1,7 +1,7 @@
 # Plan — URL Shortener Service
 
 ## Stack
-- Java 21, zero external runtime dependencies (uses `com.sun.net.httpserver`
+- Java 17, zero external runtime dependencies (uses `com.sun.net.httpserver`
   for the HTTP layer) so the prototype compiles/runs anywhere a JDK exists.
 - JUnit 5 for tests, executed with `mvn test`.
 - In-repo Java SAST scanner (`com.example.shortener.sast.SastScanner`) as the

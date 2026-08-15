@@ -8,7 +8,7 @@ alwaysApply: true
 Read `.specify/memory/constitution.md` before proposing code.
 
 Non-negotiable:
-- Java 21 only. Do not add Python (or other) app, test, or SAST tooling.
+- Java 17 only. Do not add Python (or other) app, test, or SAST tooling.
 - JUnit 5 for every public service behavior: happy path, edge, and failure.
 - Run `mvn test` and `mvn -q exec:java -Dexec.mainClass=com.example.shortener.sast.SastScanner`.
 - HIGH/CRITICAL SAST findings block HITL.

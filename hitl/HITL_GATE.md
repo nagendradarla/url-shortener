@@ -1,26 +1,27 @@
-# HITL Review Gate — URL Shortener Service
+# HITL Review Gate — Click Counts on Resolve (002)
 
 **Status: AWAITING HUMAN APPROVAL**
 
-Java-only quality gates replaced the previous Python sandbox harness.
-Per constitution.md, the agent stops here and requires an explicit human
-decision before merge.
+Per constitution.md, automated gates are green. The agent stops here and
+must not merge. Reviewer: Approve / Request changes / Reject.
 
 ## Summary
 | Gate | Result |
 |---|---|
-| Requirements coverage | FR-1..FR-6 implemented (`specs/001-url-shortener/spec.md`) |
-| Test gate | `mvn test` (JUnit 5: validator, codec, service, server, SAST) |
-| Security gate (SAST) | `com.example.shortener.sast.SastScanner` — HIGH/CRITICAL block merge |
-| Traceability | Tasks T1–T10 map to FRs; tests annotated with FR/task IDs |
+| Feature | `specs/002-click-counts` (FR-001..FR-007) |
+| Test gate | `mvn test` — 29 tests, 0 failures |
+| Security gate (SAST) | 5 files, 0 findings |
+| Storage | In-memory only — **no database** |
 | HITL | This file + GitHub PR review. Agent must not merge. |
 
-## What changed in this increment
-- Removed Python mirrors (`tools/*.py`, `security/sast_scan.py`, `SelfCheckRunner`)
-- Native Java SAST + Maven/GitHub Actions gates
-- Spec Kit layout (`.specify/`, `specs/001-url-shortener/`)
-- Cursor rules, skills, and stop-hook loop (max 5)
-- GitHub PR template / CODEOWNERS as the HITL surface
+## What changed
+- `UrlShortenerService`: `AtomicLong` click map; increment on successful `resolve()`; `clickCount()` read-only
+- `UrlShortenerServer`: `GET /stats/{code}` (200 count / 404); `GET /{code}` still 302 and increments
+- Reserved codes `stats` / `shorten` not issued as short codes
+- JUnit: service + HTTP coverage for counts, unknown codes, concurrent increments, idempotent shorten
+
+## Tasks
+T001–T019 in `specs/002-click-counts/tasks.md` marked complete.
 
 ## Reviewer decision
 - [ ] **Approve** — merge as-is

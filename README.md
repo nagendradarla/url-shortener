@@ -1,6 +1,6 @@
 # URL Shortener — Spec-Driven Development
 
-Java 21 URL shortener built with Spec Kit methodology: constitution-gated agentic
+Java 17 URL shortener built with Spec Kit methodology: constitution-gated agentic
 loop, JUnit 5, in-repo SAST, and mandatory human-in-the-loop (HITL) before merge.
 
 **uv applies to Spec Kit CLI only**, not to the Java service. Setup steps:
@@ -12,7 +12,7 @@ loop, JUnit 5, in-repo SAST, and mandatory human-in-the-loop (HITL) before merge
 |---|---|---|
 | `/speckit.constitution` | `.specify/memory/constitution.md` | JUnit, SAST, HITL, Java-only, max 5 iterations |
 | `/speckit.specify` | `specs/001-url-shortener/spec.md` | FR-1..FR-6 |
-| `/speckit.plan` | `specs/001-url-shortener/plan.md` | Java 21 + quality gates + loop |
+| `/speckit.plan` | `specs/001-url-shortener/plan.md` | Java 17 + quality gates + loop |
 | `/speckit.tasks` | `specs/001-url-shortener/tasks.md` | T1–T10 |
 | `/speckit.implement` | `src/` | Code + tests produced under the loop |
 | HITL | `hitl/HITL_GATE.md` + GitHub PR review | Human must approve; agent must not merge |

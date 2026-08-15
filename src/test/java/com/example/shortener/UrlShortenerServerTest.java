@@ -66,6 +66,32 @@ class UrlShortenerServerTest {
         assertEquals(400, response.statusCode());
     }
 
+    @Test // FR-001, FR-002, FR-004
+    void statsReturnsZeroThenOneAfterRedirectAndDoesNotIncrement() throws Exception {
+        String code = post("/shorten", "https://example.com/stats-path").body();
+        HttpResponse<String> before = get("/stats/" + code);
+        assertEquals(200, before.statusCode());
+        assertEquals("0", before.body());
+
+        HttpResponse<String> redirect = get("/" + code);
+        assertEquals(302, redirect.statusCode());
+
+        HttpResponse<String> after = get("/stats/" + code);
+        assertEquals(200, after.statusCode());
+        assertEquals("1", after.body());
+
+        HttpResponse<String> again = get("/stats/" + code);
+        assertEquals(200, again.statusCode());
+        assertEquals("1", again.body());
+    }
+
+    @Test // FR-005
+    void statsUnknownCodeReturns404() throws Exception {
+        HttpResponse<String> response = get("/stats/missing");
+        assertEquals(404, response.statusCode());
+        assertTrue(response.body().toLowerCase().contains("not found"));
+    }
+
     private HttpResponse<String> post(String path, String body) throws Exception {
         HttpRequest request = HttpRequest.newBuilder(URI.create(baseUrl + path))
                 .POST(HttpRequest.BodyPublishers.ofString(body, StandardCharsets.UTF_8))
