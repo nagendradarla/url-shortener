@@ -93,4 +93,85 @@ class UrlShortenerServiceTest {
         assertEquals(8, codes.size());
         assertNotEquals("1", service.shorten("https://example.com/other"));
     }
+
+    @Test // FR-001
+    void newShortenReportsClickCountZero() {
+        String code = service.shorten("https://example.com/counted");
+        Optional<Long> count = service.clickCount(code);
+        assertTrue(count.isPresent());
+        assertEquals(0L, count.get());
+    }
+
+    @Test // FR-002
+    void resolveIncrementsClickCount() {
+        String code = service.shorten("https://example.com/inc");
+        assertEquals(0L, service.clickCount(code).orElseThrow());
+        service.resolve(code);
+        assertEquals(1L, service.clickCount(code).orElseThrow());
+        service.resolve(code);
+        assertEquals(2L, service.clickCount(code).orElseThrow());
+    }
+
+    @Test // FR-003
+    void blankOrNullResolveDoesNotIncrement() {
+        String code = service.shorten("https://example.com/blank-resolve");
+        service.resolve("   ");
+        service.resolve(null);
+        assertEquals(0L, service.clickCount(code).orElseThrow());
+    }
+
+    @Test // FR-004
+    void clickCountDoesNotIncrement() {
+        String code = service.shorten("https://example.com/lookup");
+        assertEquals(0L, service.clickCount(code).orElseThrow());
+        assertEquals(0L, service.clickCount(code).orElseThrow());
+        service.resolve(code);
+        assertEquals(1L, service.clickCount(code).orElseThrow());
+        assertEquals(1L, service.clickCount(code).orElseThrow());
+    }
+
+    @Test // FR-003, FR-005
+    void unknownOrBlankClickCountIsEmptyAndDoesNotCreateCounter() {
+        assertTrue(service.clickCount("doesNotExist").isEmpty());
+        assertTrue(service.clickCount("").isEmpty());
+        assertTrue(service.clickCount(null).isEmpty());
+        assertTrue(service.resolve("doesNotExist").isEmpty());
+        assertTrue(service.clickCount("doesNotExist").isEmpty());
+    }
+
+    @Test // idempotent shorten shares count
+    void repeatingShortenDoesNotResetCount() {
+        String url = "https://example.com/shared-count";
+        String code = service.shorten(url);
+        service.resolve(code);
+        assertEquals(code, service.shorten(url));
+        assertEquals(1L, service.clickCount(code).orElseThrow());
+    }
+
+    @Test // concurrent increments
+    void concurrentResolvesDoNotLoseIncrements() throws Exception {
+        String code = service.shorten("https://example.com/concurrent");
+        int threads = 20;
+        int perThread = 5;
+        var pool = java.util.concurrent.Executors.newFixedThreadPool(threads);
+        try {
+            var latch = new java.util.concurrent.CountDownLatch(threads);
+            for (int i = 0; i < threads; i++) {
+                pool.submit(() -> {
+                    try {
+                        for (int n = 0; n < perThread; n++) {
+                            service.resolve(code);
+                        }
+                    } finally {
+                        latch.countDown();
+                    }
+                });
+            }
+            assertTrue(latch.await(5, java.util.concurrent.TimeUnit.SECONDS));
+        } finally {
+            pool.shutdown();
+            assertTrue(pool.awaitTermination(5, java.util.concurrent.TimeUnit.SECONDS));
+        }
+        assertEquals((long) threads * perThread, service.clickCount(code).orElseThrow());
+    }
 }

@@ -9,7 +9,7 @@ import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-/** Minimal HTTP layer: POST /shorten, GET /{code} (T8). */
+/** Minimal HTTP layer: POST /shorten, GET /stats/{code}, GET /{code}. */
 public class UrlShortenerServer {
 
     private final UrlShortenerService service;
@@ -31,6 +31,7 @@ public class UrlShortenerServer {
     public HttpServer start(int port) throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/shorten", this::handleShorten);
+        server.createContext("/stats", this::handleStats);
         server.createContext("/", this::handleResolve);
         server.start();
         return server;
@@ -50,13 +51,32 @@ public class UrlShortenerServer {
         }
     }
 
+    private void handleStats(HttpExchange exchange) throws IOException {
+        if (!"GET".equalsIgnoreCase(exchange.getRequestMethod())) {
+            respond(exchange, 405, "Method Not Allowed");
+            return;
+        }
+        String path = exchange.getRequestURI().getPath();
+        String code = path.startsWith("/stats/") ? path.substring("/stats/".length()) : "";
+        if (code.isBlank()) {
+            respond(exchange, 404, "Not found");
+            return;
+        }
+        Optional<Long> count = service.clickCount(code);
+        if (count.isPresent()) {
+            respond(exchange, 200, Long.toString(count.get()));
+        } else {
+            respond(exchange, 404, "Not found");
+        }
+    }
+
     private void handleResolve(HttpExchange exchange) throws IOException {
         if (!"GET".equalsIgnoreCase(exchange.getRequestMethod())) {
             respond(exchange, 405, "Method Not Allowed");
             return;
         }
         String code = exchange.getRequestURI().getPath().replaceFirst("^/", "");
-        if (code.isBlank() || "shorten".equals(code)) {
+        if (code.isBlank() || "shorten".equals(code) || "stats".equals(code)) {
             respond(exchange, 400, "Missing short code");
             return;
         }

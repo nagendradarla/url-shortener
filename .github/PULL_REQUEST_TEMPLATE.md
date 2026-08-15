@@ -13,7 +13,7 @@
 
 ## HITL (constitution III)
 
-The agent must not merge this PR. Reviewer chooses one:
+Required reviewer: **@nagendradarla** (constitution VI). The agent must not merge this PR. Reviewer chooses one:
 
 - [ ] **Approve** — merge as-is
 - [ ] **Request changes** — loop continues

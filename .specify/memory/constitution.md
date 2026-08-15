@@ -1,3 +1,12 @@
+<!--
+Sync Impact Report
+- Version change: 1.1.0 → 1.2.0 (MINOR: new principle VI)
+- Modified principles: none renamed
+- Added sections: VI. Spec Branch and Pull Request
+- Removed sections: none
+- Follow-up TODOs: none
+-->
+
 # Constitution — URL Shortener Service
 
 Non-negotiable rules the agent must satisfy before any code is proposed for merge.
@@ -38,7 +47,28 @@ These gates apply to every iteration of the agentic loop, not just the final one
 - Every code change maps to a task ID.
 - Every test maps to a requirement ID.
 
+## VI. Spec Branch and Pull Request
+- After implementation for a spec is finished AND constitution gates pass
+  (`mvn test` and Java SAST with zero HIGH/CRITICAL findings), the agent MUST
+  commit the code. Do not commit to `main`.
+- Every spec MUST use a dedicated Git branch named `spec{N}`, where `{N}` is
+  the numeric prefix of the active feature directory with leading zeros
+  stripped (`specs/002-click-counts` → `spec2`). Create and switch to that
+  branch if it does not already exist.
+- The agent MUST push the branch and open a GitHub PR targeting `main`.
+- If an open PR already exists for the current branch, the agent MUST NOT
+  open a second PR. Push the new commit to that branch so it appears on the
+  existing PR.
+- Every PR MUST request review from GitHub user `nagendradarla`
+  (`gh pr create --reviewer nagendradarla`, or
+  `gh pr edit --add-reviewer nagendradarla` when updating an existing PR).
+  If GitHub rejects the request because that user is the PR author, record
+  that in the PR body and `hitl/HITL_GATE.md`; CODEOWNERS still names
+  `nagendradarla` and HITL approval is still required.
+- The agent MUST NOT merge the PR.
+
 ## Governance
-- Version: 1.1.0
+- Version: 1.2.0
+- Last amended: 2026-08-15
 - Amendment: change this file via a dedicated PR; HITL still required.
 - Compliance: `/speckit.analyze` and the quality-gate workflow must both pass.

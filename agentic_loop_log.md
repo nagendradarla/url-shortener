@@ -41,3 +41,15 @@ hooks/skills; HITL via PR review.
 **Test gate:** 20/20 JUnit tests passed.
 **Security gate:** 5 Java sources analyzed, 0 findings.
 **Decision:** Automated gates green. STOP for HITL (`hitl/HITL_GATE.md`). Do not merge.
+
+---
+
+## Iteration 4 (002-click-counts)
+
+**Implemented:** T001–T019. In-memory click counts (no database). Increment on successful `resolve()`. `GET /stats/{code}` for lookup. Unknown codes stay 404.
+
+**Test gate:** 29 passed, 0 failed
+
+**Security gate:** 5 files, no findings. Clean.
+
+**Decision:** Automated gates green. STOP for HITL. Do not merge.
