@@ -58,7 +58,7 @@ Then in Cursor, run in order (full path):
 5. `/speckit.checklist` — optional (after official `specify init`)
 6. `/speckit.tasks` — already T1–T10
 7. `/speckit.analyze` — consistency check
-8. `/speckit.implement` — agentic loop (max 5 iterations, then HITL)
+8. `/speckit.implement` — agentic loop (max 5 iterations), then commit on `spec{N}`, push/PR, HITL
 9. `/speckit.converge` — append leftover tasks if the code diverged
 
 Shorter path for tiny follow-ups: specify → plan → tasks → implement → converge.
@@ -85,7 +85,7 @@ Then:
 /speckit.converge
 ```
 
-Open a PR. CI runs constitution gates. A human reviews (HITL). The agent never merges.
+After gates pass, commit on branch `spec{N}` (not `main`), push, and open a PR with reviewer `nagendradarla`. If a PR already exists for that branch, push the commit to it instead of opening another PR. CI runs constitution gates. A human reviews (HITL). The agent never merges.
 
 Brownfield rule: upgrade Spec Kit (`specify self upgrade`) separately from changing `specs/` behavior.
 
@@ -103,6 +103,7 @@ Then:
 
 - Enable **Settings → Rules → Require a pull request before merging** and **require approvals** (this is HITL).
 - Require the `Quality gates` check.
+- Every spec lands on branch `spec{N}` with a PR reviewed by `nagendradarla` (constitution VI).
 - `/speckit.taskstoissues` to turn `tasks.md` into issues.
 - PRs use `.github/PULL_REQUEST_TEMPLATE.md`.
 

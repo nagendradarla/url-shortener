@@ -10,7 +10,7 @@ loop, JUnit 5, in-repo SAST, and mandatory human-in-the-loop (HITL) before merge
 
 | Phase | Artifact | Contents |
 |---|---|---|
-| `/speckit.constitution` | `.specify/memory/constitution.md` | JUnit, SAST, HITL, Java-only, max 5 iterations |
+| `/speckit.constitution` | `.specify/memory/constitution.md` | JUnit, SAST, HITL, Java-only, max 5 iterations, spec branch + PR |
 | `/speckit.specify` | `specs/001-url-shortener/spec.md` | FR-1..FR-6 |
 | `/speckit.plan` | `specs/001-url-shortener/plan.md` | Java 17 + quality gates + loop |
 | `/speckit.tasks` | `specs/001-url-shortener/tasks.md` | T1–T10 |
@@ -56,7 +56,7 @@ curl -i http://localhost:8080/<returned-code>
 
 ```
 implement(task) -> compile -> test -> SAST -> {
-    all_pass? -> HITL package, STOP
+    all_pass? -> commit on spec{N} -> push/PR (reviewer nagendradarla) -> HITL STOP
     fail?     -> patch -> loop (max 5)
 }
 ```
@@ -65,4 +65,4 @@ Cursor `stop` hook runs the same gates (`loop_limit` 5). GitHub Actions runs the
 
 ## GitHub
 
-CI workflow, PR template (HITL checklist), feature issue template, and CODEOWNERS are in `.github/`. Create the remote after `gh auth login` — see the Spec Kit doc above.
+CI workflow, PR template (HITL checklist), feature issue template, and CODEOWNERS are in `.github/`. After gates pass, the agent commits on `spec{N}`, pushes, and opens or updates a PR with required reviewer `nagendradarla` (constitution VI). The agent never merges.

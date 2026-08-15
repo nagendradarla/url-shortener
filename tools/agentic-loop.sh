@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Agentic quality-gate loop (constitution IV).
-# implement -> compile -> test -> sast -> {pass -> HITL stop | fail -> exit 1}
+# implement -> compile -> test -> sast -> {pass -> commit spec{N} / PR -> HITL stop | fail -> exit 1}
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -33,7 +33,7 @@ mvn -q -B exec:java \
   echo ""
   echo "**Test gate:** see hitl/test-report.txt"
   echo "**Security gate:** see hitl/sast-report.txt"
-  echo "**Decision:** automated gates green. STOP for HITL — do not merge."
+  echo "**Decision:** automated gates green. Commit on spec{N}, push/PR (reviewer nagendradarla), STOP for HITL — do not merge."
 } >> "${LOG}"
 
-echo "All automated gates green. Present hitl/HITL_GATE.md for human approval."
+echo "All automated gates green. Commit on spec{N}, push or update the PR (reviewer nagendradarla), then present hitl/HITL_GATE.md for human approval."

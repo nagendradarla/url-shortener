@@ -176,6 +176,24 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Check that implemented features match the original specification
    - Validate that tests pass and coverage meets requirements
    - Confirm the implementation follows the technical plan
+   - Run constitution gates: `mvn test` and
+     `mvn -q exec:java -Dexec.mainClass=com.example.shortener.sast.SastScanner`.
+     HIGH/CRITICAL SAST findings block the next step.
+
+10. **Spec branch, commit, and PR (constitution VI)** — required after gates pass:
+   - Do not commit to `main`. Use dedicated branch `spec{N}` where `{N}` is the
+     numeric prefix of FEATURE_DIR with leading zeros stripped
+     (`specs/002-click-counts` → `spec2`). Create/switch to that branch if needed.
+   - Commit the implementation (and HITL package) on that branch.
+   - If `gh pr list --head <current-branch> --state open` shows an existing PR:
+     push the commit to that branch; do **not** open a second PR. If reviewer
+     `nagendradarla` is missing, run `gh pr edit --add-reviewer nagendradarla`.
+     If GitHub rejects a self-review request (author is `nagendradarla`), note
+     it in the PR body and `hitl/HITL_GATE.md`.
+   - Otherwise: `git push -u origin HEAD` then
+     `gh pr create --base main --reviewer nagendradarla` (HITL package in the body).
+     Same self-review fallback as above.
+   - The agent MUST NOT merge. Stop for HITL.
 
 Note: This command assumes a complete task breakdown exists in tasks.md. If tasks are incomplete or missing, suggest running `/speckit-tasks` first to regenerate the task list.
 
@@ -222,5 +240,8 @@ Report final status with summary of completed work.
 
 - [ ] All tasks in tasks.md completed and marked `[X]`
 - [ ] Implementation validated against specification, plan, and test coverage
+- [ ] Constitution gates passed (`mvn test` + SAST)
+- [ ] Committed on `spec{N}` (not `main`), pushed, and PR opened or updated with reviewer `nagendradarla` (constitution VI)
+- [ ] Agent did not merge; HITL package produced
 - [ ] Extension hooks dispatched or skipped according to the rules in Mandatory Post-Execution Hooks above
 - [ ] Completion reported to user with summary of completed work

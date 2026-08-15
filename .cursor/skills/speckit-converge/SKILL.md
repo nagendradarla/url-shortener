@@ -233,8 +233,9 @@ Append to the **end** of `tasks.md`, per the append contract:
 - On `tasks_appended`: state how many tasks were appended under which phase, and recommend
   running `/speckit-implement` to complete them; note that a follow-up converge
   run will find fewer or no remaining items.
-- On `converged`: recommend proceeding to review / opening a PR. No further implement pass
-  is needed for this feature's specified scope.
+- On `converged`: follow constitution VI — commit on `spec{N}`, push, and open or
+  update the PR with reviewer `nagendradarla`. Do not merge. No further implement
+  pass is needed for this feature's specified scope.
 
 ### 9. Check for extension hooks
 
